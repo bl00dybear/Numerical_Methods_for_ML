@@ -10,30 +10,21 @@ def UTRIS(U,b,n):
     return b
 
 
-def GAXPYtrI(A,x,n,y=None):
-    r = np.zeros(len(x))
-        
-    for i in range (0,n):
-        for j in range (0,i+1):
-            if j == i:
-                r[i] += x[j]
-            else:
-                r[i] += A[i][j]*x[j]
-        if y is not None:
-            r[i] += y[i]
-            
-    return r
-
 def main():
-    n = 3
-    # A = np.random.randn(n,n)
+    n = 6
+    A = np.random.randn(n,n)
+    
+    b = np.dot(A,[2,-6,1,5.5,1,1])
+    
+    # print(A)
 
-    A = [
-        [2,4,-2],
-        [4,9,-3],
-        [-2,-3,7]
-    ]   
-    b = [2,8,10]
+    # A = [
+    #     [2,4,-2],
+    #     [4,9,-3],
+    #     [-2,-3,7]
+    # ]   
+    # b = [2,8,10]
+    # x = [-1 2 2] 
 
     
     for k in range(0,n-1):
@@ -44,7 +35,6 @@ def main():
             for j in range(k+1,n):
                 A[i][j] = A[i][j] + A[k][j]*A[i][k]
                 
-    # -1 2 2 
                 
     print(UTRIS(A,b,n))
 
