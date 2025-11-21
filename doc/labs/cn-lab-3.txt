@@ -1,0 +1,165 @@
+                   Calcul Numeric
+                     Laboratorul 3.
+             Descompunerea Valorilor Singulare
+
+
+
+1     Descompunerea valorilor singulare
+Pentru orice matrice A ∈ Rm×n există matricile ortogonale U ∈ Rm×m s, i
+V ∈ Rn×n astfel ı̂ncât
+
+                                     A = U SV >                                      (1)
+unde S ∈ Rm×n este o matrice diagonală având r elemente nenule, unde r
+reprezintă rangul matriici A. Elementele nenule σi ale lui S sunt ordonate
+descrescător σ1 ≥ σ2 ≥ ... ≥ σr > 0. Acestea se numesc valorile singulare ale
+matricii A. Coloanele lui U reprezintă vectorii singulari la stângă, ı̂n timp ce
+coloanele lui v > vectorii singulari la dreapta.
+    Valorile singulare ale lui A sunt rădăcinile pătrate ale valorilor proprii ale
+matricii A> A.
+    Descompunerea valorilor singulare reprezintă o schimbare de bază. Privind
+matricea A ca o transformare, spunem că ea transformă spat, iul Rn ı̂n spat, iul
+Rm . De aceea, o reprezentare utilă a matricii presupune găsirea unei perechi
+de baze pentru cele două spat, ii. Matricile U s, i V constituie o alegere potrivită
+pentru aceaste baze, iar reprezentarea lui A ı̂n raport cu acestea este o matrice
+diagonală.
+
+1.1    Rangul unei matrici
+Not, iunea de rang al unei matrici reprezintă numărul de coloane liniar indepen-
+dente. În practică, pentru a calcula rangul se foloses, te observat, ia că acesta este
+egal cu numărul de valori singulare nenule.
+     Prezent, a zgomotului ı̂n date poate masca rangul real al unei matrici. Fie A ∈
+Rm×n o matrice de rang nemaximal r, cu r < min(m, n). Prin introducerea de
+variat, ii mici, zgomotul perturbă liniaritatea coloanelor din A, făcând ca aceasta
+să aibă rang maxim. Prezent, a zgomotului poate fi evaluată din valorile singulare
+ale matricii. Valorile σi <  pot fi considerate neglijabile, ele corespunzând
+zgomotului. Valoarea lui  poate fi aleasă empiric.
+
+
+
+                                           1
+                  Figura 1: Dimensiunea datelor poate fi redusă.
+
+
+    Observat, ia de mai sus duce la o altă aplicat, ie a SVD: aproximarea de rang
+mic a unei matrici. Aceasta poate fi văzută ca o compresie a informat, iei din
+matricea A având rang r s, i presupune aproximarea matricii prin trunchierea
+valorilor singulare. Numim Ak o aproximare de rang k a lui A, cu k < r
+                     k
+                     X
+              Ak =         σj uj vj> = U [:, 1 : k]S[1 : k, 1 : k]V [:, 1 : k]>       (2)
+                     j=1
+
+    Matricea Ak va cont, ine doar informat, ia importantă din A.
+
+
+2     Analiza componentelor principale
+Sect, iunea aceasta prezintă motivat, ia ultimei afirmat, ii de mai sus. Semnalele
+ı̂ntâlnite ı̂n practică pot avea dimensiune mare, ı̂nsă o parte din informat, ia
+cont, inută ı̂n ele poate fi redundantă sau nesemnificativă. Aceasta ı̂nseamnă
+că ele pot fi aproximate cu semnale de dimensiune mai mică, fără a pierde
+informat, ie relevantă (pentru aplicat, ia ı̂n cauză). O astfel de reprezentare are s, i
+avantajul unui cost de calcul mai mic ı̂n rezolvarea problemelor cu setul respectiv
+de date.
+     Figura 1 prezintă o astfel de situat, ie. Cu toate că datele au trei dimensiuni,
+se observă că ele pot fi aproximate ı̂n două dimensiuni, deoarece variat, ia pe axa
+z este nesemnificativă (ı̂n raport cu variat, ia pe celelalte două axe).
+     Analiza componentelor principale (Principal Component Analysis - PCA)
+este un algoritm de reducere a dimensiunii semnalelor ce foloses, te principiul
+variant, ei maxime. Ne dorim să ret, inem din date doar trăsăturile semnificative.
+Prin urmare vom căuta direct, iile pe care variant, a este mare s, i le vom elimina
+
+
+                                              2
+pe cele ı̂n care datele au variant, ă mică. PCA găses, te aceste direct, ii, numite
+componente principale. Prima astfel de direct, ie este cea care minimizează media
+pătratelor distant, elor de la puncte la acea dreaptă. Următoarea direct, ie este
+aleasă extrăgând in matricea init, ială contribut, ia primei direct, ii s, i calculul noii
+drepte care minimizează media pătratelor distant, elor.
+     Această procedură este echivalentă cu calculul descompunerii valorilor sin-
+gulare ale matricii A, deci cu descompunerea valorilor proprii ale lui A> A.
+Componentele principale sunt vectorii proprii ai A> A. Pentru reducerea di-
+mensiunii este suficientă deci alegerea unui număr p de vectori proprii.
+     Pentru a calcula PCA este necesară o etapă preliminară de centrare a date-
+lor. Această operat, ie presupune scăderea din fiecare coloană a mediei respectivei
+coloane, astfel ı̂ncât fiecare nouă coloană are medie 0. O altă etapă de preproce-
+sare, utilă atunci când variat, iile coloanelor diferă semnificativ (spre exemplu da-
+torită faptului că reprezintă trăsături ale semnalului ce corespund unor mărimi
+fizice diferite ca scală) este operat, ia de standardizare. Pentru aceasta, fiecare
+coloană se ı̂mparte la deviat, ia standard ale elementelor coloanei.
+
+
+3     Ghid Python
+Pentru a rezolva exercit, iile din laboratorul de astăzi, avet, i nevoie de bibliotecile
+numpy, scipy s, i pandas, modulele random.sample, sklearn.decomposition.PCA
+matplotlib.image s, i matplotlib.pyplot.
+
+Pentru a calcula rangul unei matrici folosit, i numpy.linalg.matrix_rank(A).
+
+Pentru a selecta aleator un număr de k elemente dintr-un s, ir crescător de nu-
+mere [1 : n], putet, i folosi random.sample(range(n),k).
+
+Pentru a crea un zgomot Gaussian de medie m s, i dispersie d, folosit, i
+numpy.random.normal(m,d,size), unde size reprezintă dimensiunea vectoru-
+lui/matricii.
+
+Pentru a calcula descopunerea valorilor singulare pentru o matrice, utilizat, i
+ U, S, V = numpy.linalg.svd(A).
+Funct, ia generează matricea V deja transpusă.
+
+Pentru a ı̂ncărca o imagine utilizat, i matplotlib.image.imread(nume_imagine).
+Pentru a afis, a o imagine salvată ı̂n matricea A, folosit, i
+matplotlibpyplot.imshow(A).
+
+Pentru a obt, ine o matrice diagonală dintr-un vector, numpy.diag(A).
+
+Pentru a realiza reducerea dimensională a unui set de date X cu algoritmul
+PCA, utilizat, i următoarele instruct, iuni, după ce at, i ı̂ncărcat modulul
+sklearn.decomposition.PCA
+
+
+                                              3
+pca = PCA(n_components=comp)
+    components = pca.fit_transform(X)
+alegând un număr comp de componente relevant pentru dimensiunea semnale-
+lor. Variabila components va cont, ine, pe coloane, direct, iile principale ale X.
+
+Pentru a importa un fis, ier .csv ı̂n format pandas dintr-o adresă url, utilizat, i
+data = pandas.read_csv(’https://example.com/’).
+
+
+4      Exercit, ii
+    1. În Sect, iunea 1.1 se ment, ionează faptul că prezent, a zgomotului poate as-
+       cunde rangul real al unei matrici. Testat, i aplicabilitatea SVD ı̂n determi-
+       narea rangului.
+        (a) Creat, i o matrice aleatoare A ∈ Rm×r , unde m = 10 s, i r = 4.
+            Calculat, i rangul matricii.
+        (b) Adăugat, i lui A un număr de 4 coloane liniar dependente astfel ı̂ncât
+            noua matrice va avea dimensiunea A ∈ Rm×n , cu n = 8. Pentru a
+            crea noile coloane, luat, i o combinat, ie liniară de c = 3 coloane deja
+            existente ı̂n A. At, i obt, inut astfel o matrice de rang nemaximal.
+            Verificat, i, calculând din nou rangul matricii.
+        (c) Adăugat, i la matricea obt, inută anterior un zgomot Gaussian de medie
+            0 s, i dispersie 0.2. Calculat, i rangul noii matrici.
+        (d) Calculat, i descompunerea valorilor singulare pentru matricea de mai
+            sus s, i afis, at, i valorile singulare. Câte din aceste valori sunt neglijabile?
+            Putet, i deduce rangul matricii neafectate de zgomot din aceste valori?
+            Comentat, i.
+    2. Comprimat, i o imagine folosind SVD.
+        (a) Încărcat, i o imagine oarecare (.bmp, .jpg etc) ı̂ntr-o matrice s, i calculat, i
+            SVD.
+        (b) Aleget, i un rang k pentru care vret, i să obt, inet, i aproximarea matri-
+            cii de mai sus, astfel ı̂ncât k < min(m, n), unde m s, i n reprezintă
+            dimensiunile matricii. Obt, inet, i aproximarea de rang k a matricii,
+            trunchiind valorile singulare.
+        (c) Vizualizat, i noua imagine.
+        (d) Repetat, i pentru 2 − 3 valori ale lui k alese ı̂n funct, ie de dimensiunea
+            imaginii, pentru a vedea gradul de compresie ı̂n fiecare caz.
+    3. Utilizat, i PCA pentru a reduce dimensiunea semnalelor din baza de date
+       iris, disponibilă la adresa
+       https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data.
+       Aleget, i numărul de componente principale ncomponents = 2 s, i vizualizat, i
+       noul set de date.
+
+
+                                              4
+
